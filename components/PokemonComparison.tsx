@@ -123,13 +123,30 @@ function PokemonImageSelector({
               ? 'bg-blue-500 text-white'
               : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
           }`}
-          title="前向き"
-          aria-label="前向き"
+          title="前向き（オス/デフォルト）"
+          aria-label="前向き（オス/デフォルト）"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
+        {pokemon.imageFrontFemale && (
+          <button
+            onClick={() => onImageTypeChange('front-female')}
+            className={`p-1.5 rounded transition-colors relative ${
+              imageType === 'front-female'
+                ? 'bg-pink-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="前向き（メス）"
+            aria-label="前向き（メス）"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+            <span className="absolute bottom-0 right-0 text-[6px] leading-none">♀</span>
+          </button>
+        )}
         {pokemon.imageBack && (
           <button
             onClick={() => onImageTypeChange('back')}
@@ -138,12 +155,29 @@ function PokemonImageSelector({
                 ? 'bg-blue-500 text-white'
                 : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
             }`}
-            title="後ろ向き"
-            aria-label="後ろ向き"
+            title="後ろ向き（オス/デフォルト）"
+            aria-label="後ろ向き（オス/デフォルト）"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
+          </button>
+        )}
+        {pokemon.imageBackFemale && (
+          <button
+            onClick={() => onImageTypeChange('back-female')}
+            className={`p-1.5 rounded transition-colors relative ${
+              imageType === 'back-female'
+                ? 'bg-pink-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="後ろ向き（メス）"
+            aria-label="後ろ向き（メス）"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="absolute bottom-0 right-0 text-[6px] leading-none">♀</span>
           </button>
         )}
         {pokemon.imageGifFront && (
@@ -154,14 +188,33 @@ function PokemonImageSelector({
                 ? 'bg-blue-500 text-white'
                 : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
             }`}
-            title="GIF前向き"
-            aria-label="GIF前向き"
+            title="GIF前向き（オス/デフォルト）"
+            aria-label="GIF前向き（オス/デフォルト）"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
+          </button>
+        )}
+        {pokemon.imageGifFrontFemale && (
+          <button
+            onClick={() => onImageTypeChange('gif-front-female')}
+            className={`p-1.5 rounded transition-colors relative ${
+              imageType === 'gif-front-female'
+                ? 'bg-pink-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="GIF前向き（メス）"
+            aria-label="GIF前向き（メス）"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+            <span className="absolute bottom-0 right-0 text-[6px] leading-none">♀</span>
           </button>
         )}
         {pokemon.imageGifBack && (
@@ -172,14 +225,33 @@ function PokemonImageSelector({
                 ? 'bg-blue-500 text-white'
                 : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
             }`}
-            title="GIF後ろ向き"
-            aria-label="GIF後ろ向き"
+            title="GIF後ろ向き（オス/デフォルト）"
+            aria-label="GIF後ろ向き（オス/デフォルト）"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
+          </button>
+        )}
+        {pokemon.imageGifBackFemale && (
+          <button
+            onClick={() => onImageTypeChange('gif-back-female')}
+            className={`p-1.5 rounded transition-colors relative ${
+              imageType === 'gif-back-female'
+                ? 'bg-pink-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="GIF後ろ向き（メス）"
+            aria-label="GIF後ろ向き（メス）"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="absolute bottom-0 right-0 text-[6px] leading-none">♀</span>
           </button>
         )}
       </div>

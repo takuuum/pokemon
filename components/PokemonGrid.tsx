@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { Pokemon, ImageType } from '@/lib/pokemon';
+import { Pokemon, ImageType, getGenderInfo } from '@/lib/pokemon';
 
 interface PokemonGridProps {
   pokemonList: Pokemon[];
@@ -38,17 +38,26 @@ function getTypeColor(type: string): string {
 function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
   const [imageType, setImageType] = useState<ImageType>('front');
   const [isHovered, setIsHovered] = useState(false);
+  const genderInfo = getGenderInfo(pokemon.genderRate);
 
   const getImageUrl = (type: ImageType): string | null => {
     switch (type) {
       case 'front':
         return pokemon.imageFront || pokemon.image || null;
+      case 'front-female':
+        return pokemon.imageFrontFemale || null;
       case 'back':
         return pokemon.imageBack || null;
+      case 'back-female':
+        return pokemon.imageBackFemale || null;
       case 'gif-front':
         return pokemon.imageGifFront || pokemon.imageGif || null;
+      case 'gif-front-female':
+        return pokemon.imageGifFrontFemale || null;
       case 'gif-back':
         return pokemon.imageGifBack || null;
+      case 'gif-back-female':
+        return pokemon.imageGifBackFemale || null;
       default:
         return pokemon.image || null;
     }
@@ -91,7 +100,7 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
               #{String(pokemon.id).padStart(3, '0')}
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-2 mb-2">
               {pokemon.typesJa.map((typeJa, index) => (
                 <span
                   key={pokemon.types[index]}
@@ -100,6 +109,27 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
                   {typeJa}
                 </span>
               ))}
+            </div>
+            {/* 性別表示 */}
+            <div className="flex gap-1 justify-center">
+              {genderInfo.isGenderless ? (
+                <span className="text-xs text-gray-500 dark:text-gray-400" title="性別なし">
+                  ⚲
+                </span>
+              ) : (
+                <>
+                  {genderInfo.hasMale && (
+                    <span className="text-xs text-blue-500" title="オス">
+                      ♂
+                    </span>
+                  )}
+                  {genderInfo.hasFemale && (
+                    <span className="text-xs text-pink-500" title="メス">
+                      ♀
+                    </span>
+                  )}
+                </>
+              )}
             </div>
 
             {/* ホバー時に表示される「詳細を見る」テキスト（スマホでは常に表示） */}

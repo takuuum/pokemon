@@ -1,4 +1,4 @@
-import { getPokemon } from '@/lib/pokemon';
+import { getPokemon, getGenderInfo } from '@/lib/pokemon';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -43,6 +43,8 @@ export default async function PokemonDetail({ params }: PageProps) {
   } catch (error) {
     notFound();
   }
+
+  const genderInfo = getGenderInfo(pokemon.genderRate);
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
@@ -100,6 +102,34 @@ export default async function PokemonDetail({ params }: PageProps) {
                         <p className="text-lg font-semibold text-gray-800 dark:text-white">
                           {pokemon.weight}kg
                         </p>
+                      </div>
+                      <div className="col-span-2">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">性別</p>
+                        <div className="flex gap-3">
+                          {genderInfo.isGenderless ? (
+                            <span className="px-3 py-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                              </svg>
+                              性別なし
+                            </span>
+                          ) : (
+                            <>
+                              {genderInfo.hasMale && (
+                                <span className="px-3 py-1.5 bg-blue-500 rounded-lg text-sm font-medium text-white flex items-center gap-2">
+                                  <span className="text-lg">♂</span>
+                                  オス
+                                </span>
+                              )}
+                              {genderInfo.hasFemale && (
+                                <span className="px-3 py-1.5 bg-pink-500 rounded-lg text-sm font-medium text-white flex items-center gap-2">
+                                  <span className="text-lg">♀</span>
+                                  メス
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
