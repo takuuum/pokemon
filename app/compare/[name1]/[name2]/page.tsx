@@ -33,7 +33,7 @@ export default async function CompareDetail({ params }: PageProps) {
             href="/compare"
             className="inline-block mb-6 text-blue-600 dark:text-blue-400 hover:underline"
           >
-            ← 比較ページに戻る
+            ◀ 比較ページに戻る
           </Link>
           <PokemonComparison pokemon1={pokemon1} pokemon2={pokemon2} />
         </div>

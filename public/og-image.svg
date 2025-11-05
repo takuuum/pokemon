@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- 背景グラデーション -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- ポケモンボール -->
+  <g transform="translate(600, 315)">
+    <circle cx="0" cy="0" r="120" fill="#fff" stroke="#1e40af" stroke-width="4"/>
+    <path d="M -120 0 A 120 120 0 0 1 120 0 L 0 0 Z" fill="#ef4444"/>
+    <path d="M -120 0 A 120 120 0 0 0 120 0 L 0 0 Z" fill="#fff"/>
+    <line x1="-120" y1="0" x2="120" y2="0" stroke="#1e40af" stroke-width="6"/>
+    <circle cx="0" cy="0" r="24" fill="#fff" stroke="#1e40af" stroke-width="4"/>
+    <circle cx="0" cy="0" r="14" fill="#3b82f6"/>
+  </g>
+
+  <!-- タイトル -->
+  <text x="600" y="200" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#fff" text-anchor="middle">ポケモン図鑑</text>
+  <text x="600" y="280" font-family="Arial, sans-serif" font-size="32" fill="#e0e7ff" text-anchor="middle">151匹のポケモンを検索・比較</text>
+</svg>
