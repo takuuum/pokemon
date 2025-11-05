@@ -60,7 +60,7 @@ export default async function PokemonDetail({ params }: PageProps) {
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
             <div className="md:flex">
               <div className="md:w-1/2 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-gray-700 dark:to-gray-600 p-8 flex items-center justify-center">
-                <PokemonImage pokemon={pokemon} size={256} />
+                <PokemonImage pokemon={pokemon} size={256} showSelector={true} />
               </div>
 
               <div className="md:w-1/2 p-8">

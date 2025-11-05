@@ -1,8 +1,8 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
-import { Pokemon } from '@/lib/pokemon';
+import { Pokemon, ImageType } from '@/lib/pokemon';
+import PokemonImage from './PokemonImage';
 
 interface PokemonComparisonProps {
   pokemon1: Pokemon;
@@ -103,8 +103,99 @@ function getStatName(statName: string): string {
   return names[statName] || statName;
 }
 
+function PokemonImageSelector({
+  pokemon,
+  imageType,
+  onImageTypeChange
+}: {
+  pokemon: Pokemon;
+  imageType: ImageType;
+  onImageTypeChange: (type: ImageType) => void;
+}) {
+  return (
+    <div className="mb-4">
+      <div className="mb-2 flex gap-1 flex-wrap justify-center">
+        <button
+          onClick={() => onImageTypeChange('front')}
+          className={`p-1.5 rounded transition-colors ${
+            imageType === 'front'
+              ? 'bg-blue-500 text-white'
+              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+          }`}
+          title="前向き"
+          aria-label="前向き"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+        {pokemon.imageBack && (
+          <button
+            onClick={() => onImageTypeChange('back')}
+            className={`p-1.5 rounded transition-colors ${
+              imageType === 'back'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="後ろ向き"
+            aria-label="後ろ向き"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+        {pokemon.imageGifFront && (
+          <button
+            onClick={() => onImageTypeChange('gif-front')}
+            className={`p-1.5 rounded transition-colors ${
+              imageType === 'gif-front'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="GIF前向き"
+            aria-label="GIF前向き"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
+        {pokemon.imageGifBack && (
+          <button
+            onClick={() => onImageTypeChange('gif-back')}
+            className={`p-1.5 rounded transition-colors ${
+              imageType === 'gif-back'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="GIF後ろ向き"
+            aria-label="GIF後ろ向き"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+      </div>
+      <PokemonImage
+        pokemon={pokemon}
+        size={192}
+        showSelector={false}
+        imageType={imageType}
+        onImageTypeChange={onImageTypeChange}
+      />
+    </div>
+  );
+}
+
 export default function PokemonComparison({ pokemon1, pokemon2 }: PokemonComparisonProps) {
-  const [hoveredPokemon, setHoveredPokemon] = useState<string | null>(null);
+  const [imageType1, setImageType1] = useState<ImageType>('front');
+  const [imageType2, setImageType2] = useState<ImageType>('front');
   const totalStats1 = calculateTotalStats(pokemon1.stats);
   const totalStats2 = calculateTotalStats(pokemon2.stats);
   const winner = totalStats1 > totalStats2 ? pokemon1 : totalStats1 < totalStats2 ? pokemon2 : null;
@@ -138,19 +229,11 @@ export default function PokemonComparison({ pokemon1, pokemon2 }: PokemonCompari
         <div className="relative grid md:grid-cols-2 gap-8 p-8">
           {/* ポケモン1 */}
           <div className="text-center">
-            <div
-              className="relative w-48 h-48 mx-auto mb-4"
-              onMouseEnter={() => setHoveredPokemon('pokemon1')}
-              onMouseLeave={() => setHoveredPokemon(null)}
-            >
-              <Image
-                src={hoveredPokemon === 'pokemon1' && pokemon1.imageGif ? pokemon1.imageGif : pokemon1.image}
-                alt={pokemon1.nameJa}
-                fill
-                className="object-contain pixelated"
-                sizes="192px"
-              />
-            </div>
+            <PokemonImageSelector
+              pokemon={pokemon1}
+              imageType={imageType1}
+              onImageTypeChange={setImageType1}
+            />
             <h3 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
               {pokemon1.nameJa}
             </h3>
@@ -213,19 +296,11 @@ export default function PokemonComparison({ pokemon1, pokemon2 }: PokemonCompari
 
           {/* ポケモン2 */}
           <div className="text-center">
-            <div
-              className="relative w-48 h-48 mx-auto mb-4"
-              onMouseEnter={() => setHoveredPokemon('pokemon2')}
-              onMouseLeave={() => setHoveredPokemon(null)}
-            >
-              <Image
-                src={hoveredPokemon === 'pokemon2' && pokemon2.imageGif ? pokemon2.imageGif : pokemon2.image}
-                alt={pokemon2.nameJa}
-                fill
-                className="object-contain pixelated"
-                sizes="192px"
-              />
-            </div>
+            <PokemonImageSelector
+              pokemon={pokemon2}
+              imageType={imageType2}
+              onImageTypeChange={setImageType2}
+            />
             <h3 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
               {pokemon2.nameJa}
             </h3>

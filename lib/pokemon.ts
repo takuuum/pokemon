@@ -2,8 +2,12 @@ export interface Pokemon {
   id: number;
   name: string;
   nameJa: string;
-  image: string;
-  imageGif?: string;
+  image: string; // デフォルト画像（前向き静止画）
+  imageFront?: string; // 前向き静止画
+  imageBack?: string; // 後ろ向き静止画
+  imageGifFront?: string; // 前向きGIF
+  imageGifBack?: string; // 後ろ向きGIF
+  imageGif?: string; // 後方互換性のため残す
   types: string[];
   typesJa: string[];
   height: number;
@@ -15,6 +19,8 @@ export interface Pokemon {
     value: number;
   }[];
 }
+
+export type ImageType = 'front' | 'back' | 'gif-front' | 'gif-back';
 
 export interface PokemonListItem {
   name: string;
@@ -98,17 +104,22 @@ export async function getPokemon(name: string): Promise<Pokemon> {
     data.abilities.map((ability: any) => getJapaneseAbilityName(ability.ability.name))
   );
 
-  // 静止画（高画質）を取得
-  const staticImage = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
-  // GIFアニメーションスプライトを取得
-  const gifImage = data.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_default;
+  // 各種画像を取得
+  const imageFront = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
+  const imageBack = data.sprites.back_default;
+  const imageGifFront = data.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_default;
+  const imageGifBack = data.sprites?.versions?.['generation-v']?.['black-white']?.animated?.back_default;
 
   return {
     id: data.id,
     name: data.name,
     nameJa,
-    image: staticImage,
-    imageGif: gifImage || undefined,
+    image: imageFront, // デフォルトは前向き静止画
+    imageFront,
+    imageBack: imageBack || undefined,
+    imageGifFront: imageGifFront || undefined,
+    imageGifBack: imageGifBack || undefined,
+    imageGif: imageGifFront || undefined, // 後方互換性
     types: data.types.map((type: any) => type.type.name),
     typesJa,
     height: data.height / 10, // デシメートルをメートルに変換
@@ -134,17 +145,22 @@ export async function getPokemonById(id: number): Promise<Pokemon> {
     data.abilities.map((ability: any) => getJapaneseAbilityName(ability.ability.name))
   );
 
-  // 静止画（高画質）を取得
-  const staticImage = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
-  // GIFアニメーションスプライトを取得
-  const gifImage = data.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_default;
+  // 各種画像を取得
+  const imageFront = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
+  const imageBack = data.sprites.back_default;
+  const imageGifFront = data.sprites?.versions?.['generation-v']?.['black-white']?.animated?.front_default;
+  const imageGifBack = data.sprites?.versions?.['generation-v']?.['black-white']?.animated?.back_default;
 
   return {
     id: data.id,
     name: data.name,
     nameJa,
-    image: staticImage,
-    imageGif: gifImage || undefined,
+    image: imageFront, // デフォルトは前向き静止画
+    imageFront,
+    imageBack: imageBack || undefined,
+    imageGifFront: imageGifFront || undefined,
+    imageGifBack: imageGifBack || undefined,
+    imageGif: imageGifFront || undefined, // 後方互換性
     types: data.types.map((type: any) => type.type.name),
     typesJa,
     height: data.height / 10,

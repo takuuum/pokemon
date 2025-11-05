@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { Pokemon } from '@/lib/pokemon';
+import { Pokemon, ImageType } from '@/lib/pokemon';
 
 interface PokemonGridProps {
   pokemonList: Pokemon[];
@@ -36,45 +36,171 @@ function getTypeColor(type: string): string {
 }
 
 function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
+  const [imageType, setImageType] = useState<ImageType>('front');
   const [isHovered, setIsHovered] = useState(false);
-  const currentImage = isHovered && pokemon.imageGif ? pokemon.imageGif : pokemon.image;
+
+  const getImageUrl = (type: ImageType): string | null => {
+    switch (type) {
+      case 'front':
+        return pokemon.imageFront || pokemon.image || null;
+      case 'back':
+        return pokemon.imageBack || null;
+      case 'gif-front':
+        return pokemon.imageGifFront || pokemon.imageGif || null;
+      case 'gif-back':
+        return pokemon.imageGifBack || null;
+      default:
+        return pokemon.image || null;
+    }
+  };
+
+  const currentImage = getImageUrl(imageType) || pokemon.image;
+  // ホバー時にGIFアニメーションに切り替える（既存の挙動を維持）
+  const displayImage = isHovered && pokemon.imageGifFront ? pokemon.imageGifFront : currentImage;
 
   return (
-    <Link href={`/pokemon/${pokemon.name}`}>
-      <div
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div className="flex flex-col items-center">
-          <div className="relative w-32 h-32 mb-4">
-            <Image
-              src={currentImage}
-              alt={pokemon.nameJa}
-              fill
-              className="object-contain pixelated"
-              sizes="128px"
-            />
+    <div className="relative">
+      <Link href={`/pokemon/${pokemon.name}`} className="block">
+        <div
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-all duration-300 cursor-pointer transform hover:scale-105 hover:shadow-2xl hover:border-2 hover:border-blue-400 active:scale-95 active:shadow-md active:border-2 active:border-blue-500 relative group border-2 border-transparent"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {/* クリック可能を示すアイコン（スマホでは常に表示、デスクトップではホバー時のみ） */}
+          <div className="absolute top-2 right-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+            <div className="bg-blue-500 text-white rounded-full p-1.5 shadow-lg">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
           </div>
-          <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">
-            {pokemon.nameJa}
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            #{String(pokemon.id).padStart(3, '0')}
-          </p>
-          <div className="flex gap-2">
-            {pokemon.typesJa.map((typeJa, index) => (
-              <span
-                key={pokemon.types[index]}
-                className={`${getTypeColor(pokemon.types[index])} px-3 py-1 rounded-full text-xs font-semibold text-white`}
-              >
-                {typeJa}
+
+          <div className="flex flex-col items-center">
+            <div className="relative w-32 h-32 mb-4">
+              <Image
+                src={displayImage}
+                alt={pokemon.nameJa}
+                fill
+                className="object-contain pixelated transition-transform duration-300 group-hover:scale-110"
+                sizes="128px"
+              />
+            </div>
+            <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
+              {pokemon.nameJa}
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              #{String(pokemon.id).padStart(3, '0')}
+            </p>
+            <div className="flex gap-2">
+              {pokemon.typesJa.map((typeJa, index) => (
+                <span
+                  key={pokemon.types[index]}
+                  className={`${getTypeColor(pokemon.types[index])} px-3 py-1 rounded-full text-xs font-semibold text-white`}
+                >
+                  {typeJa}
+                </span>
+              ))}
+            </div>
+
+            {/* ホバー時に表示される「詳細を見る」テキスト（スマホでは常に表示） */}
+            <div className="my-3 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span className="text-xs text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1">
+                詳細を見る
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </span>
-            ))}
+            </div>
           </div>
         </div>
+      </Link>
+
+      {/* 画像切り替えボタン */}
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-20 flex gap-1 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300" onClick={(e) => e.stopPropagation()}>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setImageType('front');
+          }}
+          className={`p-1 rounded transition-colors ${
+            imageType === 'front'
+              ? 'bg-blue-500 text-white'
+              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+          }`}
+          title="前向き"
+          aria-label="前向き"
+        >
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+        {pokemon.imageBack && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setImageType('back');
+            }}
+            className={`p-1 rounded transition-colors ${
+              imageType === 'back'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="後ろ向き"
+            aria-label="後ろ向き"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+        {pokemon.imageGifFront && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setImageType('gif-front');
+            }}
+            className={`p-1 rounded transition-colors ${
+              imageType === 'gif-front'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="GIF前向き"
+            aria-label="GIF前向き"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
+        {pokemon.imageGifBack && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setImageType('gif-back');
+            }}
+            className={`p-1 rounded transition-colors ${
+              imageType === 'gif-back'
+                ? 'bg-blue-500 text-white'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+            title="GIF後ろ向き"
+            aria-label="GIF後ろ向き"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
       </div>
-    </Link>
+    </div>
   );
 }
 

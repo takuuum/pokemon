@@ -5,6 +5,7 @@ import { Pokemon } from '@/lib/pokemon';
 import SearchBar from './SearchBar';
 import PokemonGrid from './PokemonGrid';
 import Sidebar from './Sidebar';
+import TypeFilter from './TypeFilter';
 
 interface PokemonSearchClientProps {
   pokemonList: Pokemon[];
@@ -16,14 +17,18 @@ export default function PokemonSearchClient({ pokemonList }: PokemonSearchClient
 
   return (
     <div className="flex">
-      <Sidebar
-        pokemonCount={pokemonList.length}
-        onTypeFilter={setSelectedType}
-        selectedType={selectedType}
-      />
+      <Sidebar pokemonCount={pokemonList.length} />
       <div className="flex-1 md:ml-64">
         <div className="container mx-auto px-4 py-8">
-          <SearchBar onSearch={setSearchQuery} />
+          <div className="mb-8">
+            <SearchBar onSearch={setSearchQuery} />
+          </div>
+          <div className="mb-8">
+            <TypeFilter
+              onTypeFilter={setSelectedType}
+              selectedType={selectedType}
+            />
+          </div>
           <PokemonGrid
             pokemonList={pokemonList}
             searchQuery={searchQuery}

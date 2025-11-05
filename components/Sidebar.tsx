@@ -5,33 +5,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 interface SidebarProps {
-  pokemonCount: number;
-  onTypeFilter: (type: string | null) => void;
-  selectedType: string | null;
+  pokemonCount?: number;
 }
 
-const pokemonTypes = [
-  { name: 'normal', nameJa: 'ノーマル', color: 'bg-gray-400' },
-  { name: 'fire', nameJa: 'ほのお', color: 'bg-red-500' },
-  { name: 'water', nameJa: 'みず', color: 'bg-blue-500' },
-  { name: 'electric', nameJa: 'でんき', color: 'bg-yellow-400' },
-  { name: 'grass', nameJa: 'くさ', color: 'bg-green-500' },
-  { name: 'ice', nameJa: 'こおり', color: 'bg-cyan-300' },
-  { name: 'fighting', nameJa: 'かくとう', color: 'bg-red-700' },
-  { name: 'poison', nameJa: 'どく', color: 'bg-purple-500' },
-  { name: 'ground', nameJa: 'じめん', color: 'bg-yellow-600' },
-  { name: 'flying', nameJa: 'ひこう', color: 'bg-indigo-400' },
-  { name: 'psychic', nameJa: 'エスパー', color: 'bg-pink-500' },
-  { name: 'bug', nameJa: 'むし', color: 'bg-green-400' },
-  { name: 'rock', nameJa: 'いわ', color: 'bg-yellow-800' },
-  { name: 'ghost', nameJa: 'ゴースト', color: 'bg-purple-700' },
-  { name: 'dragon', nameJa: 'ドラゴン', color: 'bg-indigo-700' },
-  { name: 'dark', nameJa: 'あく', color: 'bg-gray-800' },
-  { name: 'steel', nameJa: 'はがね', color: 'bg-gray-500' },
-  { name: 'fairy', nameJa: 'フェアリー', color: 'bg-pink-300' },
-];
-
-export default function Sidebar({ pokemonCount, onTypeFilter, selectedType }: SidebarProps) {
+export default function Sidebar({ pokemonCount }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
@@ -94,7 +71,7 @@ export default function Sidebar({ pokemonCount, onTypeFilter, selectedType }: Si
               </h2>
             </Link>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              {pokemonCount}匹のポケモン
+              ポケモン図鑑
             </p>
           </div>
 
@@ -166,69 +143,25 @@ export default function Sidebar({ pokemonCount, onTypeFilter, selectedType }: Si
             </ul>
           </nav>
 
-          {/* タイプフィルタ */}
-          <div className="mb-8">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wide">
-              タイプで絞り込み
-            </h3>
-            <div className="space-y-2">
-              <button
-                onClick={() => {
-                  onTypeFilter(null);
-                  setIsOpen(false);
-                }}
-                className={`
-                  w-full text-left px-4 py-2 rounded-lg transition-colors
-                  ${
-                    selectedType === null
-                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                  }
-                `}
-              >
-                すべて
-              </button>
-              {pokemonTypes.map((type) => (
-                <button
-                  key={type.name}
-                  onClick={() => {
-                    onTypeFilter(type.name);
-                    setIsOpen(false);
-                  }}
-                  className={`
-                    w-full text-left px-4 py-2 rounded-lg transition-colors flex items-center
-                    ${
-                      selectedType === type.name
-                        ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                    }
-                  `}
-                >
-                  <span
-                    className={`w-3 h-3 rounded-full mr-2 ${type.color}`}
-                  />
-                  {type.nameJa}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* 統計情報 */}
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wide">
-              統計
-            </h3>
-            <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <div className="flex justify-between">
-                <span>総ポケモン数</span>
-                <span className="font-semibold">{pokemonCount}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>タイプ数</span>
-                <span className="font-semibold">{pokemonTypes.length}</span>
+          {pokemonCount !== undefined && (
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 uppercase tracking-wide">
+                統計
+              </h3>
+              <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex justify-between">
+                  <span>総ポケモン数</span>
+                  <span className="font-semibold">{pokemonCount}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>タイプ数</span>
+                  <span className="font-semibold">18</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
         </div>
       </aside>
     </>
