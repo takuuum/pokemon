@@ -1,5 +1,6 @@
 import { getPokemonListWithJapanese } from '@/lib/pokemon';
 import PokemonCompareClient from '@/components/PokemonCompareClient';
+import ComparisonHistory from '@/components/ComparisonHistory';
 import SidebarSimple from '@/components/SidebarSimple';
 
 export default async function ComparePage() {
@@ -19,6 +20,7 @@ export default async function ComparePage() {
             </p>
           </div>
           <PokemonCompareClient pokemonList={pokemonList} />
+          <ComparisonHistory />
         </div>
       </div>
     </main>

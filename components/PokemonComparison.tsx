@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Pokemon, ImageType } from '@/lib/pokemon';
 import PokemonImage from './PokemonImage';
+import { saveComparisonToHistory } from './ComparisonHistory';
 
 interface PokemonComparisonProps {
   pokemon1: Pokemon;
@@ -208,6 +209,16 @@ export default function PokemonComparison({ pokemon1, pokemon2 }: PokemonCompari
   const pokemon2Effectiveness = pokemon2.types.map(type =>
     getTypeEffectiveness(type, pokemon1.types)
   ).reduce((a, b) => a * b, 1);
+
+  // 比較履歴をlocalStorageに保存
+  useEffect(() => {
+    saveComparisonToHistory(
+      pokemon1.name,
+      pokemon1.nameJa,
+      pokemon2.name,
+      pokemon2.nameJa
+    );
+  }, [pokemon1.name, pokemon1.nameJa, pokemon2.name, pokemon2.nameJa]);
 
   return (
     <div className="max-w-6xl mx-auto">
