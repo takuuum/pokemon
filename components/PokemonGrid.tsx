@@ -133,7 +133,7 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
             </div>
 
             {/* ホバー時に表示される「詳細を見る」テキスト（スマホでは常に表示） */}
-            <div className="my-3 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="my-3 group-hover:opacity-100 transition-opacity duration-300">
               <span className="text-xs text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1">
                 詳細を見る
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
