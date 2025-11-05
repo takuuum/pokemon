@@ -1,6 +1,6 @@
 import { getPokemonList, getPokemon } from '@/lib/pokemon';
 import PokemonDiagnosis from '@/components/PokemonDiagnosis';
-import SidebarSimple from '@/components/SidebarSimple';
+import Sidebar from '@/components/Sidebar';
 
 export default async function DiagnosisPage() {
   // 全ポケモンのデータを取得（診断に使用）
@@ -11,7 +11,7 @@ export default async function DiagnosisPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <SidebarSimple />
+      <Sidebar />
       <div className="md:ml-64">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center mb-8">

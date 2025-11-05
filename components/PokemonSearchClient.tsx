@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Pokemon } from '@/lib/pokemon';
 import SearchBar from './SearchBar';
 import PokemonGrid from './PokemonGrid';
-import Sidebar from './Sidebar';
 import TypeFilter from './TypeFilter';
 
 interface PokemonSearchClientProps {
@@ -16,26 +15,21 @@ export default function PokemonSearchClient({ pokemonList }: PokemonSearchClient
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
   return (
-    <div className="flex">
-      <Sidebar pokemonCount={pokemonList.length} />
-      <div className="flex-1 md:ml-64">
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <SearchBar onSearch={setSearchQuery} />
-          </div>
-          <div className="mb-8">
-            <TypeFilter
-              onTypeFilter={setSelectedType}
-              selectedType={selectedType}
-            />
-          </div>
-          <PokemonGrid
-            pokemonList={pokemonList}
-            searchQuery={searchQuery}
-            selectedType={selectedType}
-          />
-        </div>
+    <div className="container mx-auto px-4">
+      <div className="mb-8">
+        <SearchBar onSearch={setSearchQuery} />
       </div>
+      <div className="mb-8">
+        <TypeFilter
+          onTypeFilter={setSelectedType}
+          selectedType={selectedType}
+        />
+      </div>
+      <PokemonGrid
+        pokemonList={pokemonList}
+        searchQuery={searchQuery}
+        selectedType={selectedType}
+      />
     </div>
   );
 }
